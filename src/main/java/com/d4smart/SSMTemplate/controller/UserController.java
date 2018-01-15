@@ -5,17 +5,16 @@ import com.d4smart.SSMTemplate.common.ServerResponse;
 import com.d4smart.SSMTemplate.pojo.User;
 import com.d4smart.SSMTemplate.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 
 /**
  * Created by d4smart on 2017/12/9 16:38
  */
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
 
@@ -23,13 +22,11 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    @ResponseBody
     public ServerResponse<String> register(User user) {
         return userService.register(user);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ResponseBody
     public ServerResponse<User> login(User user, HttpSession session) {
         ServerResponse<User> serverResponse = userService.login(user);
         if (serverResponse.isSuccess()) {
@@ -40,14 +37,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
-    @ResponseBody
     public ServerResponse<User> getUserInfo(HttpSession session) {
         User user = (User) session.getAttribute(Const.LOGIN_USER);
         return ServerResponse.createBySuccess(user);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    @ResponseBody
     public ServerResponse<User> update(User user, HttpSession session) {
         User loginUser = (User) session.getAttribute(Const.LOGIN_USER);
 
@@ -61,7 +56,6 @@ public class UserController {
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    @ResponseBody
     public ServerResponse<String> logout(HttpSession session) {
         session.removeAttribute(Const.LOGIN_USER);
         return ServerResponse.createBySuccess("退出登录成功");
